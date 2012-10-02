@@ -448,7 +448,7 @@ r(Req, Code, Headers) ->
     crary_sock:write_resp_line(Req, Code),
     Headers2 = crary_headers:extend(
                  [{<<"server">>, ident(Req)},
-                  {<<"date">>, gtime:gtostr(gtime:gnow(), rfc1123)}],
+                  {<<"date">>, gtime:gtostr(gtime:gnow(), iso8601)}],
                  Headers),
     crary_headers:write(Req, Headers2).
 

@@ -151,8 +151,7 @@ keep_alive_p(#crary_req{vsn = {1, 1}} = Req, _) ->
             false
     end;
 keep_alive_p(#crary_req{vsn = Vsn}, _) ->
-    error_logger:warning_msg("unknown_http_version '~p'~n",
-                             [crary_sock:vsn_to_list(Vsn)]),
+    error_logger:warning_msg("unknown_http_version '~p'~n", [Vsn]),
     false.
 
 connection_keep_alive_header(Req) ->
@@ -171,9 +170,9 @@ validate_vsn11_has_host(#crary_req{vsn = {1, 1}} = Req) ->
         true ->
             ok;
         false ->
-            crary:r_error(Req, 400, <<"<p>HTTP 1.1 requests must include the
+            crary:error(Req, 400, <<"<p>HTTP 1.1 requests must include the
                                           <i>host</i> header</p>.">>),
-            crary_sock:close(Req),
+            crary_sock:done_writing(Req),
             exit(normal)
     end;
 validate_vsn11_has_host(_) ->

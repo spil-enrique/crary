@@ -128,7 +128,7 @@ read_all(Req) ->
     case crary_headers:get("content-length", Req, null) of
         null ->
             exit(chunking_read_not_yet_supported),
-            case crary_headers:has("transfer-encoding") of
+            case crary_headers:has("transfer-encoding", Req#crary_req.headers) of
                 true ->
                     Reader = new_reader(Req),
                     read_all_(Reader, MaxBytes, read(Reader), []);
@@ -163,7 +163,7 @@ write(Req, Data) ->
 done_writing(#crary_req{vsn = {1, 0}} = Req) ->
     %% since we were streaming, we can't keep-alive for http 1.0, even
     %% if that was requested
-    crary_sock:close(Req);
+    crary_sock:done_writing(Req);
 done_writing(Req) ->
     crary_sock:write(Req, <<"0\r\n\r\n">>).
 
