@@ -1,0 +1,8 @@
+%% This is the application resource file (.app file) for the crary, application.
+{application, crary,
+  [{description, "An HTTP server for the REST of us"},
+   {vsn, git},
+   {registered,[crary_sup]},
+   {applications, [kernel, stdlib]},
+   {mod, {crary_app,[]}}]}.
+
